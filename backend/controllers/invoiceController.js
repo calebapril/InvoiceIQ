@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Invoice from "../models/invoiceModel.js";
 import { getAuth } from "@clerk/express";
+import path from 'path';
 
 const API_BASE = "http://localhost:4000";
 
@@ -222,7 +223,7 @@ export async function getInvoices(req, res) {
         { invoiceNumber: { $regex: search, $options: "i" } },
       ];
     }
-    const invoices = (await Invoice.find(q)).sort({ createdAt: -1 }).lean();
+    const invoices = await Invoice.find(q).sort({ createdAt: -1 }).lean();
     return res.status(200).json({
       success: true,
       data: invoices
@@ -237,3 +238,191 @@ export async function getInvoices(req, res) {
 }
 
 // GET INVOICE BY Id
+export async function getInvoiceById(req, res) {
+  try {
+    const { userId } = getAuth(req) || {};
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required."
+      })
+    }
+
+    const { id } = req.params;
+    let inv;
+    if (isObjectIdString(id)) inv = await Invoice.findById(id);
+    else inv = await Invoice.findOne({
+      invoiceNumber: id
+    });
+
+    if (!inv)
+      return res.status(404).json({ success: false, message: "invoice not found" });
+
+
+    if (inv.owner && String(inv.owner) !== String(userId)) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden: Not your invoice."
+      })
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      data: inv
+    })
+  } catch (err) {
+    console.error("GETINVOICEBYID ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+}
+
+
+
+// update an invoice
+export async function updateInvoice(req, res) {
+  try {
+    const { userId } = getAuth(req) || {};
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required."
+      })
+    }
+
+    const { id } = req.params;
+    const body = req.body || {};
+
+    const query = isObjectIdString(id) ? { _id: id, owner: userId } : { invoiceNumber: id, owner: userId }
+    const existing = await Invoice.findOne(query);
+
+    if (!existing) {
+      return res.status(404).json({ success: false, message: "invoice not found" })
+    }
+
+    // if user changes the invoice number
+    // ensure that it not exists already or not in use
+    /* UPDATE */
+    if (body.invoiceNumber && String(body.invoiceNumber).trim() !== existing.invoiceNumber) {
+      const conflict = await Invoice.findOne({ invoiceNumber: String(body.invoiceNumber).trim() });
+      if (conflict && String(conflict._id) !== String(existing._id)) {
+        return res
+          .status(409)
+          .json({ success: false, message: "Invoice number already exists" });
+      }
+    }
+
+    let items = [];
+    if (Array.isArray(body.items)) items = body.items;
+    else if (typeof body.items === "string" && body.items.length) {
+      try {
+        items = JSON.parse(body.items);
+      } catch {
+        items = [];
+      }
+    }
+
+    const taxPercent = Number(
+      body.taxPercent ?? body.tax ?? body.defaultTaxPercent ?? existing.taxPercent ?? 0
+    );
+    const totals = computeTotals(items, taxPercent);
+    const fileUrls = uploadedFilesToUrls(req);
+
+    // to update..we can updates these fields
+    const update = {
+      invoiceNumber: body.invoiceNumber,
+      issueDate: body.issueDate,
+      dueDate: body.dueDate,
+      fromBusinessName: body.fromBusinessName,
+      fromEmail: body.fromEmail,
+      fromAddress: body.fromAddress,
+      fromPhone: body.fromPhone,
+      fromGst: body.fromGst,
+      client:
+        typeof body.client === "string" && body.client.trim()
+          ? { name: body.client }
+          : body.client || existing.client || {},
+      items,
+      subtotal: totals.subtotal,
+      tax: totals.tax,
+      total: totals.total,
+      currency: body.currency,
+      status: body.status ? String(body.status).toLowerCase() : undefined,
+      taxPercent,
+      logoDataUrl:
+        fileUrls.logoDataUrl ||
+        (body.logoDataUrl || body.logo) ||
+        undefined,
+      stampDataUrl:
+        fileUrls.stampDataUrl ||
+        (body.stampDataUrl || body.stamp) ||
+        undefined,
+      signatureDataUrl:
+        fileUrls.signatureDataUrl ||
+        (body.signatureDataUrl || body.signature) ||
+        undefined,
+      signatureName: body.signatureName,
+      signatureTitle: body.signatureTitle,
+      notes: body.notes,
+    };
+
+    Object.keys(update).forEach((k) => update[k] === undefined && delete update[k]);
+
+    const updated = await Invoice.findOneAndUpdate({ _id: existing._id }, { $set: update }, { new: true, runValidators: true });
+
+    if (!updated) return res.status(500).json({
+      success: false,
+      message: "Failed to update invoice"
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Invoice updated.",
+      data: updated
+    });
+  } catch (err) {
+    console.error("updateInvoice error:", err);
+    if (err && err.code === 11000 && err.keyPattern && err.keyPattern.invoiceNumber) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Invoice number already exists" });
+    }
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+// to delete an invoice
+export async function deleteInvoice(req, res) {
+  try {
+    const { userId } = getAuth(req) || {};
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required."
+      })
+    }
+
+
+    const { id } = req.params;
+    const query = isObjectIdString(id) ? { _id: id, owner: userId } : { invoiceNumber: id, owner: userId };
+
+    const found = await Invoice.findOne(query);
+    if (!found) return res.status(404).json({
+      success: false,
+      message: "Invoice not found"
+    });
+    await Invoice.deleteOne({ _id: found._id });
+    return res.status(200).json({
+      success: true,
+      message: "Invoice deleted."
+    })
+  } catch (err) {
+    console.error("DELETEINVOICE ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+}
