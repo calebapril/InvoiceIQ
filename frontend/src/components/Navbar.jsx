@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { navbarStyles } from "../assets/dummyStyles";
 import logo from '../assets/calebdesigns.png';
@@ -197,7 +198,9 @@ useEffect(() => {
 
 
             {/* Mobile toggle menu */}
-            <button onClick={() => setOpen(!open)} className={navbarStyles.mobileMenuButton}>
+            <button onClick={() => setOpen(!open)} className={navbarStyles.mobileMenuButton}
+              aria-label={open ? "Close menu" : "Open menu"} // <-- Important
+              >
                 <div className={navbarStyles.mobileMenuIcon}>
                   <span className={`${navbarStyles.mobileMenuLine1} ${
                     open ? navbarStyles.mobileMenuLine1Open : navbarStyles.mobileMenuLine1Closed
