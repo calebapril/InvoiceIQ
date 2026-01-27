@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { appShellStyles } from "../assets/dummyStyles";
 import logo from "../assets/calebdesigns.png";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, Outlet } from "react-router-dom";
 import { useClerk, useUser } from "@clerk/clerk-react";
 
 const AppShell = () => {
@@ -312,7 +313,8 @@ const AppShell = () => {
                 <div className={appShellStyles.collapseSection}>
                   <button
                     onClick={toggleSidebar}
-                    className={`${appShellStyles.collapseButtonInner} ${collapsed ? appShellStyles.collapseButtonCollapsed : ""}`} aria-label={open ? "Close menu" : "Open menu"} // <-- Important
+                    className={`${appShellStyles.collapseButtonInner} ${collapsed ? appShellStyles.collapseButtonCollapsed : ""}`}
+                    aria-label={open ? "Close menu" : "Open menu"} // <-- Important
                   >
                     {/* {!collapsed && (
                       <span>{collapsed ? "Expand" : "Collapse"}</span>
@@ -477,10 +479,46 @@ const AppShell = () => {
                       {firstName()}
                     </span>
                   </h2>
+
+                  <p className={appShellStyles.welcomeSubtitle}>
+                    Ready to create awesome invoices?
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className={appShellStyles.headerActions}>
+              <button
+                onClick={() => navigate("/app/create-invoice")}
+                className={appShellStyles.ctaButton}
+              >
+                <CreateIcon className={appShellStyles.ctaIcon} />
+                <span className=" hidden xs:inline">Create Invoice</span>
+                <span className="xs:hidden">Create</span>
+              </button>
+
+              <div className={appShellStyles.userSectionDesktop}>
+                <div className={appShellStyles.userInfo}>
+                  <div className={appShellStyles.userName}>{displayName}</div>
+                  <div className={appShellStyles.userEmail}>{user?.email}</div>
+                </div>
+
+                <div className={appShellStyles.userAvatarContainer}>
+                  <div className={appShellStyles.userAvatar}>
+                    {initials()}
+                    <div className={appShellStyles.userAvatarBorder} />
+                  </div>
+                  <div className={appShellStyles.userStatus}></div>
                 </div>
               </div>
             </div>
           </header>
+
+          <main className={appShellStyles.main}>
+            <div className={appShellStyles.mainContainer}>
+              <Outlet />
+            </div>
+          </main>
         </div>
       </div>
     </div>

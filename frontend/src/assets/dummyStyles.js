@@ -636,14 +636,14 @@ export const heroStyles = {
   container: "relative max-w-7xl mx-auto px-6 py-24 lg:py-32",
   grid: "grid lg:grid-cols-2 gap-16 lg:gap-24 items-center",
   
-  // Content Column
+  //Content Column
   content: "space-y-8 lg:space-y-10",
   contentInner: "space-y-6",
-  
+
   // Badge
-  badge: "inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-sm",
+  badge: "inline-flex items-center  gap-2 px-4 py-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-sm",
   badgeDot: "w-2 h-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-500 animate-pulse",
-  badgeText: "text-sm font-medium text-gray-700",
+  badgeText: "text-sm  font-medium text-gray-700",
   
   // Heading
   heading: "text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight",
