@@ -614,7 +614,8 @@ export const featuresStyles = {
   
   // Bottom CTA
   bottomCtaContainer: "mt-16 text-center",
-  bottomCtaButton: "group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300",
+  // bottomCtaButton: "group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300",
+  bottomCtaButton: "group inline-flex items-center px-8 py-4 bg-black text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:bg-gray-900",
   bottomCtaButtonText: "Explore All Features",
   bottomCtaButtonIcon: "w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300"
 };

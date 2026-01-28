@@ -147,9 +147,114 @@ const Hero = () => {
               ))}
             </div>
           </div>
-
-
           {/* //NOTE - Right side */}
+          <div className={heroStyles.demoColumn}>
+            <div className={heroStyles.demoFloating1}></div>
+            <div className={heroStyles.demoFloating2}></div>
+
+            <div className={heroStyles.demoContainer}>
+              <div className={heroStyles.demoCard}>
+                <div className={heroStyles.cardHeader}>
+                  <div className="space-y-1">
+                    <div className={heroStyles.cardLogoContainer}>
+                      <div className={heroStyles.cardLogo}>CD</div>
+                      <div>
+                        <div className={heroStyles.cardClientName}>
+                          Caleb Designs
+                        </div>
+                        <div className={heroStyles.cardClientGst}>
+                          {/* //NOTE - In Nigeria, the equivalent of a "GST number" for tax compliance is the Taxpayer Identification Number (TIN) or VAT registration number, typically a 12-digit numeric code, formatted as NNNNNNNN-NNNN. Examples include 12345678-0001, where the first 8 digits are unique to the entity and the last 4 are for branch identification.  */}
+                          TIN: NNNNNNNN-NNNN
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={heroStyles.cardInvoiceInfo}>
+                    <div className={heroStyles.cardInvoiceLabel}>Invoices</div>
+                    <div className={heroStyles.cardInvoiceNumber}>
+                      #INV-1024
+                    </div>
+                    <div className={heroStyles.cardStatus}>Paid</div>
+                  </div>
+                </div>
+                <div className={heroStyles.itemsContainer}>
+                  {[
+                    {
+                      description: "Website Design & Development",
+                      amount: "₦500,000",
+                    },
+                    {
+                      description: "Consultation (2 hours)",
+                      amount: "₦50,000",
+                    },
+                    {
+                      description: "Premium Hosting Setup",
+                      amount: "₦100,000",
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className={heroStyles.itemRow}>
+                      <div className="flex items-center gap-3">
+                        <div className={heroStyles.itemDot}></div>
+                        <span className={heroStyles.itemDescription}>
+                          {item.description}
+                        </span>
+                      </div>
+                      <span className={heroStyles.itemAmount}>
+                        {item.amount}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className={heroStyles.calculationContainer}>
+                  <div className={heroStyles.calculationRow}>
+                    <span className={heroStyles.calculationLabel}>
+                      Subtotal
+                    </span>
+                    <span className={heroStyles.calculationValue}>
+                      ₦600,000
+                    </span>
+                  </div>
+                  <div className={heroStyles.calculationRow}>
+                    <span className={heroStyles.calculationLabel}>
+                      TIN(18%)
+                    </span>
+                    <span className={heroStyles.calculationValue}>₦10,000</span>
+                  </div>
+                  <div className={heroStyles.totalRow}>
+                    <span className={heroStyles.totalLabel}>Total Amount</span>
+                    <span className={heroStyles.totalValue}>₦570,000</span>
+                  </div>
+                </div>
+
+                <div className={heroStyles.actionButtons}>
+                  <button className={heroStyles.previewButton}>
+                    <span className={heroStyles.previewButtonText}>
+                      Preview
+                    </span>
+                  </button>
+                  <button className={heroStyles.sendButton}>
+                    <span className={heroStyles.sendButtonText}>
+                      Send Invoice
+                    </span>
+                  </button>
+                </div>
+              </div>{" "}
+              <div className={heroStyles.cornerAccent1}></div>
+              <div className={heroStyles.cornerAccent2}></div>
+            </div>
+          </div>
+        </div>
+
+        <div className={heroStyles.cardBackground}></div>
+        <div className={heroStyles.scrollIndicator}>
+          <div className={heroStyles.scrollContainer}>
+            <span className={heroStyles.scrollText}>Scroll to Explore</span>
+            <div className={heroStyles.scrollBar}>
+              <div className={heroStyles.scrollDot}></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
