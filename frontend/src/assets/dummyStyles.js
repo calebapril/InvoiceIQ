@@ -125,8 +125,8 @@ export const createInvoiceStyles = {
   
   // Header
   headerContainer: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4",
-  headerTitle: "text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight",
-  headerSubtitle: "mt-2 text-lg text-gray-600 max-w-3xl",
+  headerTitle: "text-3xl lg:text-4xl font-medium text-gray-900 tracking-tight",
+  headerSubtitle: "mt-2 text-sm text-gray-600 max-w-3xl",
   headerButtonContainer: "flex items-center gap-3",
   
   // Cards/Sections

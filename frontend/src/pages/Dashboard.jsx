@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { dashboardStyles } from "../assets/dummyStyles";
 import KpiCard from "../components/KpiCard";
+import StatusBadge from "../components/StatusBadge";
 
 const API_BASE = "http://localhost:4000";
 
@@ -427,22 +428,35 @@ const Dashboard = () => {
             <h3 className={dashboardStyles.quickStatsTitle}>Stats Overview</h3>
             <div className="space-y-3">
               <div className={dashboardStyles.quickStatsRow}>
-                <span className={dashboardStyles.quickStatsLabel}>Paid Rate</span>
+                <span className={dashboardStyles.quickStatsLabel}>
+                  Paid Rate
+                </span>
                 <span className={dashboardStyles.quickStatsValue}>
                   {kpis.totalInvoices > 0
-                  ? ((kpis.paidCount / kpis.totalInvoices) * 100).toFixed(1) : 0} %
+                    ? ((kpis.paidCount / kpis.totalInvoices) * 100).toFixed(1)
+                    : 0}{" "}
+                  %
                 </span>
               </div>
 
               <div className={dashboardStyles.quickStatsRow}>
-                <span className={dashboardStyles.quickStatsLabel}>Avg. Invoice</span>
-                <span className={dashboardStyles.quickStatsValue}>{currencyFmt(
-                  kpis.totalInvoices > 0 ? (kpis.totalPaid + kpis.totalUnpaid) / kpis.totalInvoices
-                : 0, "NGN")}</span>
+                <span className={dashboardStyles.quickStatsLabel}>
+                  Avg. Invoice
+                </span>
+                <span className={dashboardStyles.quickStatsValue}>
+                  {currencyFmt(
+                    kpis.totalInvoices > 0
+                      ? (kpis.totalPaid + kpis.totalUnpaid) / kpis.totalInvoices
+                      : 0,
+                    "NGN",
+                  )}
+                </span>
               </div>
 
               <div className={dashboardStyles.quickStatsRow}>
-                <span className={dashboardStyles.quickStatsLabel}>Collection Eff.</span>
+                <span className={dashboardStyles.quickStatsLabel}>
+                  Collection Eff.
+                </span>
                 <span className={dashboardStyles.quickStatsValue}>
                   {kpis.paidPercentage.toFixed(1)}%
                 </span>
@@ -450,9 +464,8 @@ const Dashboard = () => {
             </div>
           </div>
 
-
           {/* //NOTE - quick action buttons */}
-           <div className={dashboardStyles.cardContainer}>
+          <div className={dashboardStyles.cardContainer}>
             <div className="p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Quick Actions
@@ -521,7 +534,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-
         <div className={dashboardStyles.contentColumn}>
           <div className={dashboardStyles.cardContainerOverflow}>
             <div className={dashboardStyles.tableHeader}>
@@ -540,7 +552,7 @@ const Dashboard = () => {
                   className={dashboardStyles.tableActionButton}
                 >
                   View All
-                                    <svg
+                  <svg
                     className="w-4 h-4"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -558,10 +570,14 @@ const Dashboard = () => {
               <table className={dashboardStyles.table}>
                 <thead>
                   <tr className={dashboardStyles.tableHead}>
-                    <th className={dashboardStyles.tableHeaderCell}>Client & ID</th>
+                    <th className={dashboardStyles.tableHeaderCell}>
+                      Client & ID
+                    </th>
                     <th className={dashboardStyles.tableHeaderCell}>Amount</th>
                     <th className={dashboardStyles.tableHeaderCell}>Status</th>
-                    <th className={dashboardStyles.tableHeaderCell}>Due Date</th>
+                    <th className={dashboardStyles.tableHeaderCell}>
+                      Due Date
+                    </th>
                     <th className={dashboardStyles.tableHeaderCell}>Actions</th>
                   </tr>
                 </thead>
@@ -571,8 +587,11 @@ const Dashboard = () => {
                     const getClientInitial = getClientInitial(inv);
 
                     return (
-                      <tr key={inv.id} className={dashboardStyles.tableRow}
-                      onClick={() => openInvoice(inv)}>
+                      <tr
+                        key={inv.id}
+                        className={dashboardStyles.tableRow}
+                        onClick={() => openInvoice(inv)}
+                      >
                         <td className={dashboardStyles.tableCell}>
                           <div className="flex items-center gap-3">
                             <div className={dashboardStyles.clientAvatar}>
@@ -594,9 +613,60 @@ const Dashboard = () => {
                             {currencyFmt(inv.amount, inv.currency)}
                           </div>
                         </td>
+
+                        <td className={dashboardStyles.tableCell}>
+                          <StatusBadge
+                            status={inv.status}
+                            size="default"
+                            showIcon={true}
+                          />
+                        </td>
+
+                        <td className={dashboardStyles.tableCell}>
+                          <div className={dashboardStyles.dateCell}>
+                            {inv.dueDate ? formatDate(inv.dueDate) : "-"}
+                          </div>
+                        </td>
+
+                        <td className={dashboardStyles.tableCell}>
+                          <div className="text-right">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openInvoice(inv);
+                              }}
+                              className={dashboardStyles.actionButton}
+                            >
+                              <EyeIcon className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-200" />
+                              View
+                            </button>
+                          </div>
+                        </td>
                       </tr>
-                    )
+                    );
                   })}
+
+                  {/* //NOTE - if no invoices are present */}
+                  {recent.length === 0 && !loading && (
+                    <tr className="">
+                      <td colSpan="5" className={dashboardStyles.emptyState}>
+                        <div className={dashboardStyles.emptyStateText}>
+                          <FileTextIcon
+                            className={dashboardStyles.emptyStateIcon}
+                          />
+                          <div className={dashboardStyles.emptyStateMessage}>
+                            No invoices yet..
+                          </div>
+                          <button
+                            onClick={() => navigate("/app/create-invoice")}
+                            className={dashboardStyles.emptyStateAction}
+                          >
+                            Create Your First Invoice
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
