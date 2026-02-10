@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* NOTE - prevent user from selecting text */
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input,textarea {
+  user-select: text;
+}
+

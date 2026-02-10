@@ -17,7 +17,7 @@ export const aiInvoiceModalStyles = {
 // src/assets/dummyStyles.js
 export const businessProfileStyles = {
   // Layout
-  pageContainer: "space-y-8 font-[pacifico]",
+  pageContainer: "space-y-8 font-['Poppins',_sans-serif]",
   
   // Header
   headerContainer: "text-center lg:text-left",
@@ -118,7 +118,7 @@ export const aiReminderModalStyles = {
 
 export const createInvoiceStyles = {
   // Layout
-  pageContainer: "space-y-8 font-[pacifico]",
+  pageContainer: "space-y-8 font-['Poppins',_sans-serif]",
   mainGrid: "grid lg:grid-cols-3 gap-8",
   leftColumn: "lg:col-span-2 space-y-8",
   rightColumn: "space-y-8",
@@ -376,11 +376,11 @@ export const appShellStyles = {
 
 export const dashboardStyles = {
   // Layout
-  pageContainer: "space-y-8 font-[pacifico]",
+  pageContainer: "space-y-8 font-['Poppins',_sans-serif]",
   
   // Header
   headerContainer: "text-center lg:text-left",
-  headerTitle: "text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight",
+  headerTitle: "text-3xl lg:text-4xl font-medium text-gray-900 tracking-tight",
   headerSubtitle: "mt-2 text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0",
   
   // KPI Grid
@@ -460,7 +460,7 @@ export const dashboardStyles = {
 
 export const invoicesStyles = {
   // Layout
-  pageContainer: "space-y-8 font-[pacifico]",
+  pageContainer: "space-y-8 font-['Poppins',_sans-serif]",
   
   // Header
   headerContainer: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4",

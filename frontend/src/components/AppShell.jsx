@@ -310,18 +310,18 @@ const AppShell = () => {
                 )}
 
                 {/* //NOTE - toggle menu */}
-                <div className={appShellStyles.collapseSection}>
+                {/* <div className={appShellStyles.collapseSection}>
                   <button
                     onClick={toggleSidebar}
                     className={`${appShellStyles.collapseButtonInner} ${collapsed ? appShellStyles.collapseButtonCollapsed : ""}`}
                     aria-label={open ? "Close menu" : "Open menu"} // <-- Important
                   >
-                    {/* {!collapsed && (
+                    {!collapsed && (
                       <span>{collapsed ? "Expand" : "Collapse"}</span>
                     )}
-                    <CollapseIcon collapsed={collapsed} /> */}
+                    <CollapseIcon collapsed={collapsed} />
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
